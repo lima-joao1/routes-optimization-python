@@ -1,6 +1,17 @@
 from Customer import Customer
 from DeliveryAddress import DeliveryAddress
 from CustomerArchive import CustomerArchive
+from VehicleArchive import VehicleArchive
+from Vehicle import Vehicle
+
+
+def vehicleRegister():
+    vehiclePlate = input("Digite a placa do veículo: ")
+    driverName = input("Digite o nome do motorista: ")
+    vehicleCapacity = int(input("Digite a capacidade de carga do veículo (kg): "))
+
+    vehicle = Vehicle(vehiclePlate, driverName, vehicleCapacity)
+    vehicleArchive.add(vehicle)
 
 
 def customerRegister():
@@ -17,9 +28,9 @@ def customerRegister():
 def printOptions():
 
     print("""1. Cadastrar clientes
-2. Alterar cadastro
-3. Cadastrar pedidos
-4. Cadastrar veículos
+2. Cadastrar veículos
+3. Alterar cadastro de cliente
+4. Cadastrar pedidos
 0. Sair""")
 
     print()
@@ -66,9 +77,13 @@ def commandManager(command):
     
     if (command == 2):
         changeRegister()
+
+    if (command == 3):
+        vehicleRegister()
         
 
 customerArchive = CustomerArchive()
+vehicleArchive = VehicleArchive()
 
 print("****** Program ******")
 
