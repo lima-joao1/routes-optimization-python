@@ -12,3 +12,6 @@ class Order:
     
     def getCustomer(self):
         return self.__customer
+    
+    def __str__(self):
+        return f"{self.__customer.getName()}"

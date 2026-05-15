@@ -6,6 +6,7 @@ from Vehicle import Vehicle
 from OrderArchive import OrderArchive
 from Order import Order
 from Route import Route
+from RouteOptimization import RouteOptimization
 
 def orderRegister():
     if not customerArchive.getCustomers():
@@ -124,11 +125,11 @@ def ordersToRoute(vehicle):
         print("Nenhum pedido em aberto.")
         return 
     ordersToRoute = []
+    vehicleCapacity = vehicle.getCapacity()
 
     while True:
         orderArchive.showOrders()
         orderIndex = int(input("\nSelecione o índice do pedido a ser adicionado à rota (0 p/ continuar): "))
-        vehicleCapacity = vehicle.getCapacity()
 
         if (orderIndex == 0):
             break
@@ -139,10 +140,16 @@ def ordersToRoute(vehicle):
             ordersToRoute.append(order)
             vehicleCapacity -= order.getOrderWeight()
             orderArchive.removeOrder(order)
-    
-    print(f"Capacidade máxima do veículo: {vehicle.getCapacity()}\n")
-    print(f"Tamanho da carga (kg): {ordersWeight(ordersToRoute)}\n")
 
+        else:
+            print(f"Capacidade do caminhão excedida. Não é possível adicionar o pedido de código: {order.getOrderID()} ")
+    
+    print("\n==================================")
+    print("RELATÓRIO FINAL DA ROTA DE ENTREGA:")
+    print(f"\nCapacidade máxima do veículo (kg): {vehicle.getCapacity()}")
+    print(f"Tamanho da carga (kg): {ordersWeight(ordersToRoute)}\n")
+    
+    
     return ordersToRoute
 
 def vehicleToRoute():
@@ -158,7 +165,7 @@ def vehicleToRoute():
 
     vehicleIndex = int(input(f"Selecione o índice do veículo: [1-{len(vehicleArchive.getVehicles())}]: "))
     vehicle = vehicleArchive.getVehicle(vehicleIndex)
-    
+    print("\n========================")
     print(f"\nVeículo selecionado: \n\n{vehicle}\n")
     return vehicle
 
@@ -169,8 +176,40 @@ def routeCreation():
     orders = ordersToRoute(vehicle)
 
     return Route(orders, vehicle)
-    
 
+def distanceBetween(ax, ay, bx, by):
+    from math import sqrt
+    return sqrt((bx - ax)**2 + (by - ay)**2)
+
+def routeOptimizer():
+    finalRoute = routeCreation()
+    optimization = RouteOptimization(finalRoute)
+
+    optimizedRoute = optimization.optimize()
+    optimizedRouteInfo(optimizedRoute, finalRoute)
+
+    
+def optimizedRouteInfo(route, finalRoute):
+    totalTraveled = 0
+
+    print(finalRoute)
+
+    for order in route:
+        totalTraveled += order.getCustomer().getDeliveryAddress().getDistance()
+    
+    print("\nRota: ")
+    print("| Depósito -> ", end="")
+
+    for i in range(len(route)):
+        print(f"{route[i]} -> ", end="")
+    print("Depósito |")
+    
+    totalTraveled += route[len(route) - 1].getCustomer().getDeliveryAddress().getDistance()
+    print(f"\nDistância percorrida: {totalTraveled:.2f} km\n")
+
+    orderArchive.showOrders()
+
+    
 def commandManager(command):
     if (command == 1):
         customerRegister()
@@ -188,7 +227,7 @@ def commandManager(command):
         orderArchive.showOrders()
 
     elif (command == 6):
-        routeCreation()
+        routeOptimizer()
         
 
 customerArchive = CustomerArchive()
@@ -197,7 +236,7 @@ orderArchive = OrderArchive()
 
 
 while True:
-    print("****** Program ******")
+    print("\n****** Program ******")
 
     print()
     printOptions()

@@ -17,6 +17,7 @@ class OrderArchive:
         print("Pedidos em aberto: ")
         for order in self.__orders:
             print(f"{i} - {order.getOrderID()}, {order.getOrderWeight()} kg, cliente: {order.getCustomer().getName()}")
+            i += 1 
         
     def getOrder(self, index):
         return self.__orders[index - 1]

@@ -16,4 +16,4 @@ class DeliveryAddress:
         return self.__y
     
     def getDistance(self):
-        return sqrt(self.__x^2 + self.__y^2)
+        return sqrt(self.__x**2 + self.__y**2)
