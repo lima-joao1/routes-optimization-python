@@ -18,3 +18,8 @@ class OrderArchive:
         for order in self.__orders:
             print(f"{i} - {order.getOrderID()}, {order.getOrderWeight()} kg, cliente: {order.getCustomer().getName()}")
         
+    def getOrder(self, index):
+        return self.__orders[index - 1]
+    
+    def removeOrder(self, order):
+        self.__orders.remove(order)

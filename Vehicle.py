@@ -12,3 +12,6 @@ class Vehicle:
     
     def getCapacity(self):
         return self.__capacity
+    
+    def __str__(self):
+        return f"Placa: {self.getVehiclePlate()} \n    Motorista: {self.__driverName} \n    Capacidade do veículo: {self.__capacity} kg"

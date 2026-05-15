@@ -7,3 +7,6 @@ class VehicleArchive:
     
     def getVehicles(self):
         return self.__vehicles
+    
+    def getVehicle(self, index):
+        return self.__vehicles[index - 1]
